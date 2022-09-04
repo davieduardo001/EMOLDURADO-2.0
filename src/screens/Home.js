@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 
 import {
   Text,
@@ -8,6 +8,8 @@ import {
   Alert,
 } from 'react-native';
 
+
+import Lottie from 'lottie-react-native';
 import {launchImageLibrary} from 'react-native-image-picker'; 
 
 import styles from '../styles/home.js'
@@ -18,8 +20,13 @@ function Home({ navigation }) {
 	//VARIABLES FOR SET THE IMAGE
 	const [imageUri, setimageUri] = React.useState('')
 
+	//VARIABLES FOR MAKE THE ANIMATION WORKS
+	const [save, setSave] = useState(false)
+    const animation = useRef(true)
+
 	//FUNCTION TO YOU SELECT THE IMAGE
 	async function selectImage(){
+		setSave(!save)
 
 		const options = {
 			storageOptions:{
@@ -54,8 +61,29 @@ function Home({ navigation }) {
 		})
 	}
 
+	useEffect(() => {
+        if (animation.current) {
+            if (save) {
+                animation.current.play(0, 211)
+            }
+            animation.current == false
+        }
+        if (animation.current == false) {
+            animation.current.play(0, 0)
+        }
+    }, [save])
+
 	return (
-	  <View style={ styles.container }>
+	  	<View style={ styles.container }>
+
+		<Lottie source={require('../imgs/photosAnimations.json')} 
+			autoPlay={false} 
+			loop={false} 
+			style={{widht: 300, height: 300}}
+			onAnimationFinish = {() => {
+				animation.current.play(0, 0)
+			}}
+			ref={animation} />
 
 	  	<Text style={ styles.text }>SELECIONE SUA IMAGEM</Text>
 
