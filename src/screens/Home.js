@@ -8,7 +8,6 @@ import {
   Alert,
 } from 'react-native';
 
-
 import Lottie from 'lottie-react-native';
 import {launchImageLibrary} from 'react-native-image-picker'; 
 
@@ -24,9 +23,19 @@ function Home({ navigation }) {
 	const [save, setSave] = useState(false)
     const animation = useRef(true)
 
+	function sleep(ms) {
+		return new Promise((accept) => {
+			setTimeout(() => {
+				accept()
+			}, ms);
+		})
+	}
+
 	//FUNCTION TO YOU SELECT THE IMAGE
 	async function selectImage(){
 		setSave(!save)
+
+		await sleep(3000)
 
 		const options = {
 			storageOptions:{
