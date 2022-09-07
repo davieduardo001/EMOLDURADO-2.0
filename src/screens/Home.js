@@ -33,8 +33,11 @@ function Home({ navigation }) {
 
 	//FUNCTION TO YOU SELECT THE IMAGE
 	async function selectImage(){
-		setSave(!save)
+		console.log('the bedore state od SAVE is: ' + save)
 
+		setSave(!save)
+		console.log('the SAVE state is: ' + save)
+	
 		await sleep(3000)
 
 		const options = {
@@ -58,12 +61,18 @@ function Home({ navigation }) {
 				const source = {uri: response.assets[0].uri }
 				setimageUri(source)
 				console.log('the selected image is: ', source)
+				
+				function navigateToAnotherView() {
+					navigation.navigate('Config', { image: source })
+					console.log('the SAVE state is: ' + save)
+				}
 
 				Alert.alert(
 					"IMAGEM SELECIONADA",
 					"Sua imagem foi selecionada com sucesso! clique OK para continuar sua edição!",
 					[
-						{ text: "OK", onPress: () => navigation.navigate('Config', { image: source }) }
+						{ text: "OK", onPress: () => navigateToAnotherView()}
+
 					]
 				)
 			}
@@ -74,11 +83,9 @@ function Home({ navigation }) {
         if (animation.current) {
             if (save) {
                 animation.current.play(0, 211)
-            }
-            animation.current == false
-        }
-        if (animation.current == false) {
-            animation.current.play(0, 0)
+            } else {
+				animation.current.play(0, 211)
+			}
         }
     }, [save])
 
@@ -88,10 +95,7 @@ function Home({ navigation }) {
 		<Lottie source={require('../imgs/photosAnimations.json')} 
 			autoPlay={false} 
 			loop={false} 
-			style={{widht: 300, height: 300}}
-			onAnimationFinish = {() => {
-				animation.current.play(0, 0)
-			}}
+			style={{widht: 180, height: 180}}
 			ref={animation} />
 
 	  	<Text style={ styles.text }>SELECIONE SUA IMAGEM</Text>
